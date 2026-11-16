@@ -1,9 +1,14 @@
+
 package com.example.covoiturage.entity;
 
 import com.example.covoiturage.enums.StatutTrajet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,11 +16,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "trajets")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Trajet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    private String villeDepart;
+
+    @NotBlank
+    private String villeArrivee;
 
     @NotNull
     private LocalDateTime dateDepart;
@@ -46,32 +60,4 @@ public class Trajet {
 
     @OneToMany(mappedBy = "trajet")
     private List<Reservation> reservations = new ArrayList<>();
-
-    public Trajet() {
-    }
-
-    public Long getId() { return id; }
-    public LocalDateTime getDateDepart() { return dateDepart; }
-    public Integer getPlacesProposees() { return placesProposees; }
-    public StatutTrajet getStatut() { return statut; }
-    public Conducteur getConducteur() { return conducteur; }
-    public Vehicule getVehicule() { return vehicule; }
-    public List<PointArret> getPointsArret() { return pointsArret; }
-    public List<Reservation> getReservations() { return reservations; }
-
-    public void setDateDepart(LocalDateTime dateDepart) { this.dateDepart = dateDepart; }
-    public void setPlacesProposees(Integer placesProposees) { this.placesProposees = placesProposees; }
-    public void setStatut(StatutTrajet statut) { this.statut = statut; }
-    public void setConducteur(Conducteur conducteur) { this.conducteur = conducteur; }
-    public void setVehicule(Vehicule vehicule) { this.vehicule = vehicule; }
-
-    public void ajouterPointArret(PointArret point) {
-        pointsArret.add(point);
-        point.setTrajet(this);
-    }
-
-    public void supprimerPointArret(PointArret point) {
-        pointsArret.remove(point);
-        point.setTrajet(null);
-    }
 }
