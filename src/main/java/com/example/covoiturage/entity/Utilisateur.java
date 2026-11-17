@@ -1,16 +1,16 @@
-
 package com.example.covoiturage.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-@Entity
-@Table(name = "utilisateurs")
-@Inheritance(strategy = InheritanceType.JOINED)
+import lombok.Setter;
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,7 +30,7 @@ public abstract class Utilisateur {
 
     @Email
     @NotBlank
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotBlank

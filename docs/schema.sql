@@ -30,7 +30,7 @@ CREATE TABLE vehicules (
     marque VARCHAR(100) NOT NULL,
     modele VARCHAR(100) NOT NULL,
     immatriculation VARCHAR(50) NOT NULL UNIQUE,
-    couleur VARCHAR(50),
+    couleur VARCHAR(50) NOT NULL,
     capacite INTEGER NOT NULL CHECK (capacite BETWEEN 1 AND 8),
     conducteur_id BIGINT NOT NULL,
     CONSTRAINT fk_vehicule_conducteur FOREIGN KEY (conducteur_id)
@@ -39,6 +39,8 @@ CREATE TABLE vehicules (
 
 CREATE TABLE trajets (
     id BIGSERIAL PRIMARY KEY,
+    ville_depart VARCHAR(120) NOT NULL,
+    ville_arrivee VARCHAR(120) NOT NULL,
     date_depart TIMESTAMP NOT NULL,
     places_proposees INTEGER NOT NULL CHECK (places_proposees >= 1),
     statut VARCHAR(20) NOT NULL CHECK (statut IN ('PUBLIE', 'COMPLET', 'TERMINE', 'ANNULE')),
