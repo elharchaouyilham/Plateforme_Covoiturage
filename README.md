@@ -16,13 +16,28 @@ spring.datasource.password=0000
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-Au démarrage, Hibernate crée les tables manquantes et `data.sql` insère les
-données de test (5 lignes minimum par table). Pour tout recréer depuis zéro,
-exécuter `docs/schema.sql` dans pgAdmin puis lancer :
+Quand PostgreSQL est utilisé (profil `postgres`), au démarrage Hibernate crée
+les tables manquantes et `data.sql` insère les données de test (5 lignes minimum
+par table). Pour tout recréer depuis zéro, exécuter `docs/schema.sql` dans
+pgAdmin puis lancer :
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE = "postgres"
+.\mvnw.cmd spring-boot:run
+```
+
+## Swagger UI sans base de données
+
+Le profil `demo` est activé **par défaut** dans `application.properties` : il
+utilise une base H2 en mémoire. Aucune installation de PostgreSQL n'est donc
+nécessaire pour lancer l'application depuis IntelliJ ou en ligne de commande.
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
+
+puis ouvrir http://localhost:8080/swagger-ui/index.html
+(JSON : http://localhost:8080/v3/api-docs).
 
 ## Tables créées
 
@@ -43,8 +58,8 @@ prénom, email, téléphone) sont copiés dans les tables `conducteurs` et
 `passagers`. Cela évite une jointure inutile et garantit un seul propriétaire
 par profil.
 
-> L’API écoute sur le port **8081** pour éviter le conflit avec Jenkins qui
-> occupe déjà le port 8080 sur cette machine.
+> L’API écoute sur le port **8080**. Swagger UI est disponible sur
+> `http://localhost:8080/swagger-ui/index.html` (JSON : `/v3/api-docs`).
 
 ## Vérification rapide dans pgAdmin
 
