@@ -5,36 +5,23 @@ covoiturage avec trajets composés de plusieurs points d’arrêt.
 
 ## Base de données
 
-### Option A — PostgreSQL déjà présent sur le port 5432 (cas actuel)
-
-Une base `covoiturage_db` existe déjà dans le conteneur `postgres-db`
-(`postgres` / `0000`, port 5432). L’application s’y connecte par défaut :
+PostgreSQL est installé en local et géré depuis pgAdmin. La base s’appelle
+`covoiturage_db` (`postgres` / `0000`, port 5432). L’application s’y connecte
+par défaut :
 
 ```properties
-spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/covoiturage_db}
-spring.datasource.username=${DB_USERNAME:postgres}
-spring.datasource.password=${DB_PASSWORD:0000}
+spring.datasource.url=jdbc:postgresql://localhost:5432/covoiturage_db
+spring.datasource.username=postgres
+spring.datasource.password=0000
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-Pour **recréer toutes les tables + les données de test** dans pgAdmin :
+Au démarrage, Hibernate crée les tables manquantes et `data.sql` insère les
+données de test (5 lignes minimum par table). Pour tout recréer depuis zéro,
+exécuter `docs/schema.sql` dans pgAdmin puis lancer :
 
 ```powershell
-Get-Content docs/schema.sql -Raw | docker exec -i postgres-db psql -U postgres -d covoiturage_db
 .\mvnw.cmd spring-boot:run
-```
-
-Le script `docs/schema.sql` supprime puis recrée les 6 tables ; `data.sql`
-(chargé au démarrage de l’application) insère ensuite 5 lignes minimum par table.
-
-### Option B — PostgreSQL du projet via Docker Compose
-
-Le port hôte `5433` est utilisé pour éviter le conflit avec le PostgreSQL déjà
-présent sur `5432` :
-
-```bash
-docker compose up -d
-DB_URL=jdbc:postgresql://localhost:5433/covoiturage_db .\mvnw.cmd spring-boot:run
 ```
 
 ## Tables créées
@@ -56,8 +43,8 @@ prénom, email, téléphone) sont copiés dans les tables `conducteurs` et
 `passagers`. Cela évite une jointure inutile et garantit un seul propriétaire
 par profil.
 
-> L’API écoute sur le port **8081** (`SERVER_PORT` surchargeable) pour éviter le
-> conflit avec Jenkins qui occupe déjà le port 8080 sur cette machine.
+> L’API écoute sur le port **8081** pour éviter le conflit avec Jenkins qui
+> occupe déjà le port 8080 sur cette machine.
 
 ## Vérification rapide dans pgAdmin
 

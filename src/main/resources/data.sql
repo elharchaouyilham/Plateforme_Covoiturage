@@ -1,6 +1,3 @@
--- Données initiales (idempotentes : ON CONFLICT DO NOTHING)
--- Exécutées après la création du schéma par Hibernate (ddl-auto=update)
-
 INSERT INTO conducteurs (id, nom, prenom, email, telephone, numero_permis) VALUES
 (1, 'El Amrani', 'Hamid', 'hamid.elamrani@example.com', '0600000001', 'PERMIS-HAMID-001'),
 (2, 'Bennani', 'Youssef', 'youssef.bennani@example.com', '0600000002', 'PERMIS-YOUSSEF-002'),
@@ -64,7 +61,6 @@ INSERT INTO reservations (id, nombre_places, montant_total, date_reservation, st
 (5, 1, 55.00, '2026-11-24 08:20:00', 'ANNULEE', 5, 5, 17, 19)
 ON CONFLICT (id) DO NOTHING;
 
--- Synchronisation des séquences (sans échec si la table est vide)
 SELECT setval('conducteurs_id_seq',  GREATEST((SELECT COALESCE(MAX(id), 1) FROM conducteurs), 1));
 SELECT setval('passagers_id_seq',    GREATEST((SELECT COALESCE(MAX(id), 1) FROM passagers), 1));
 SELECT setval('vehicules_id_seq',    GREATEST((SELECT COALESCE(MAX(id), 1) FROM vehicules), 1));
